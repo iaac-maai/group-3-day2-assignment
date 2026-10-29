@@ -1,8 +1,9 @@
-numpy
-pandas
-scikit-learn
-matplotlib
-seaborn
-joblib
-jupyter
-ipykernel
+# Runtime imports; notebook UI packages can be installed separately.
+numpy==2.5.4
+pandas==3.1.0
+scikit-learn==1.9.1
+scipy==1.18.1
+matplotlib==3.11.2
+seaborn==0.13.2
+joblib==1.6.0
+huggingface_hub==2.3.0

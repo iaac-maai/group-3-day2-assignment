@@ -1,0 +1,11 @@
+# Local environments and secrets
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+__pycache__/
+.ipynb_checkpoints/
+# Generated serialized models belong on Hugging Face, not in new Git commits.
+*.joblib
+evaluation-rerun.json
