@@ -1,3 +1,55 @@
+# Mumbai rental learning experiments and published regression model
+
+## Published model and reproducibility
+
+The single published result is a **tuned Random Forest regression pipeline** estimating monthly Mumbai rent in INR from eight property attributes. The notebook also retains Decision Tree regression and furnishing classification experiments for teaching; those are not the published artifact.
+
+- **Model Card:** [models/README.md](models/README.md), following section 6 of the assignment.
+- **Hugging Face model:** https://huggingface.co/iaac-maai/group3-day2-mumbairental
+- **Reviewed correction:** https://huggingface.co/iaac-maai/group3-day2-mumbairental/discussions/4 (available through `refs/pr/4` until merge).
+- **Notebook:** [notebooks/supervised_learning.ipynb](notebooks/supervised_learning.ipynb); see its final **Final published model** section, which runs independently of the earlier classifier variables.
+- **Evaluation:** [models/evaluation.json](models/evaluation.json) stores full-precision test scores, CV folds, baselines and provenance.
+
+The forest uses 200 trees, maximum depth 10, minimum leaf size 5, and seed 42. The regression split is 15,076 train / 3,770 test rows, shuffled 80/20, seed 42, without stratification. Numeric median imputation has no scaling; categorical mode imputation precedes one-hot encoding.
+
+| Published forest metric | Test | Five-fold training CV mean ± std |
+|---|---:|---:|
+| R² | 0.6187457378 | 0.6516348668 ± 0.0704462869 |
+| MAE (INR/month) | 38044.9279004604 | 37250.7823349273 ± 711.5192966437 |
+| RMSE (INR/month) | 82899.4548739774 | 77140.4309250284 ± 10150.5695328676 |
+
+CV uses five shuffled KFold splits with seed 42 and `ddof=0`. It is not nested and was used in tuning. `Location` is constant (`Mumbai`); 752 test rows match training rows on the predictors plus target. Historical listing data, repeated rows and possible mixed area units limit generalization. The Model Card explains these issues and includes mean/median baseline results. The older Decision Tree R² of 0.611 describes a different model.
+
+### Install and test
+
+From the repository root, use Python 3.12 (audit tested on 3.12.14) and a virtual environment:
+
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# macOS/Linux: source .venv/bin/activate
+python -m pip install -r requirements.txt
+python models/predict_example.py --revision refs/pr/4
+```
+
+The download example verifies the reviewed artifact hash and prints **INR 25,586.09/month**. After the Hugging Face PR is merged, use its reviewed full commit SHA in place of `refs/pr/4`. The original notebook reports Python 3.14.7; its ML package versions are pinned here. Matplotlib and seaborn pins come from the saved notebook environment; the appended regression section was tested separately without rerunning every historical experiment.
+
+To verify the published artifact's metrics, download its trusted `model.joblib` into `models/`, then run:
+
+```bash
+python models/reproduce_evaluation.py --data data/mumbai_cleaned.csv --model models/model.joblib
+```
+
+Alternatively, run the notebook's final section in a fresh kernel to train the selected configuration, calculate test/CV metrics and export/reload `models/model.joblib`. It refuses to overwrite an existing export. A fresh serialization can have a different hash despite matching predictions; use the original Hub file for the hash-pinned script above. Generated joblib files are ignored; historical exports already tracked under `notebooks/models/` remain for traceability.
+
+**Security:** joblib/pickle loading can execute code; only load trusted files and revisions. Checksums identify the reviewed bytes but do not prove safety.
+
+**Authors:** Ahmed Belahcen, Nandini Rathod, Sanjana Kiran, Akanksha Dhumal. **Course:** AI Methods I, IAAC MaAI 2026/27. **Model/code:** MIT, see [LICENSE](LICENSE). **Training data:** Harshal H (`harshalhonde`), [Kaggle Property Rental Listings Dataset](https://www.kaggle.com/datasets/harshalhonde/property-rental-listings-dataset), separately declared CC BY 4.0; the team's cleaned snapshot is a modification, not an MIT relicensing of the data.
+
+## Preserved exploratory classification report
+
+The original classification report below is retained as the historical teaching experiment. Its ROC-AUC of approximately 0.577 belongs to the earlier unrestricted classifier and is not a validated score for the later depth-5 classifier or the published forest.
+
 # Mumbai Property Rental Classification Using Machine Learning
 
 ## 1. Project Overview
