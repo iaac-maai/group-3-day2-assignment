@@ -1,0 +1,314 @@
+{
+  "versions": {
+    "python": "3.12.14",
+    "sklearn": "1.9.1",
+    "pandas": "3.1.0",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "joblib": "1.6.0"
+  },
+  "rows": 18846,
+  "train": 15076,
+  "test": 3770,
+  "artifacts": {
+    "mumbai_rental_model.joblib": {
+      "sha256": "b4193b09cc1316008936387fd28f65b07960447feab5d1eaa279ed8745791262",
+      "repr": "Pipeline(steps=[('preprocess',\n                 ColumnTransformer(transformers=[('num',\n                                                  Pipeline(steps=[('imputer',\n                                                                   SimpleImputer(strategy='median'))]),\n                                                  ['Area_num', 'BHK_num',\n                                                   'Bathrooms_num',\n                                                   'Balconies_num']),\n                                                 ('nom',\n                                                  Pipeline(steps=[('imputer',\n                                                                   SimpleImputer(strategy='most_frequent')),\n                                                                  ('encoder',\n                                                                   OneHotEncoder(handle_unknown='ignore'))]),\n                                                  ['Furnished_clean', 'Facing',\n                                                   'Location',\n                                                   'Property Type'])])),\n                ('model',\n                 RandomForestRegressor(max_depth=10, min_samples_leaf=5,\n                                       n_estimators=200, n_jobs=1,\n                                       random_state=42))])",
+      "features": [
+        "Area_num",
+        "BHK_num",
+        "Bathrooms_num",
+        "Balconies_num",
+        "Furnished_clean",
+        "Facing",
+        "Location",
+        "Property Type"
+      ],
+      "test": {
+        "r2": 0.6187457377846625,
+        "mae": 38044.92790046044,
+        "rmse": 82899.45487397742
+      },
+      "parameters": {
+        "bootstrap": true,
+        "ccp_alpha": 0.0,
+        "criterion": "squared_error",
+        "max_depth": 10,
+        "max_features": 1.0,
+        "max_leaf_nodes": null,
+        "max_samples": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 5,
+        "min_samples_split": 2,
+        "min_weight_fraction_leaf": 0.0,
+        "monotonic_cst": null,
+        "n_estimators": 200,
+        "n_jobs": 1,
+        "oob_score": false,
+        "random_state": 42,
+        "verbose": 0,
+        "warm_start": false
+      }
+    },
+    "mumbai_rental_pipeline.joblib": {
+      "sha256": "7d965e0355b4756ec1c332ab179e4ff794904f737ce284230d9d11321a30088e",
+      "repr": "Pipeline(steps=[('preprocess',\n                 ColumnTransformer(transformers=[('num',\n                                                  Pipeline(steps=[('imputer',\n                                                                   SimpleImputer(strategy='median')),\n                                                                  ('scaler',\n                                                                   StandardScaler())]),\n                                                  ['Area_num', 'BHK_num',\n                                                   'Bathrooms_num',\n                                                   'Balconies_num']),\n                                                 ('nom',\n                                                  Pipeline(steps=[('imputer',\n                                                                   SimpleImputer(strategy='most_frequent')),\n                                                                  ('encoder',\n                                                                   OneHotEncoder(handle_unknown='ignore'))]),\n                                                  ['Furnished_clean', 'Facing',\n                                                   'Location',\n                                                   'Property Type'])])),\n                ('model', LinearRegression())])",
+      "features": [
+        "Area_num",
+        "BHK_num",
+        "Bathrooms_num",
+        "Balconies_num",
+        "Furnished_clean",
+        "Facing",
+        "Location",
+        "Property Type"
+      ],
+      "test": {
+        "r2": 0.6141610589680642,
+        "mae": 42283.67085844522,
+        "rmse": 83396.40878309717
+      },
+      "parameters": {
+        "copy_X": true,
+        "fit_intercept": true,
+        "n_jobs": null,
+        "positive": false,
+        "tol": 1e-06
+      }
+    }
+  },
+  "example": {
+    "input": {
+      "Area_num": 330.0,
+      "BHK_num": 1.0,
+      "Bathrooms_num": 1.0,
+      "Balconies_num": null,
+      "Furnished_clean": "Furnished",
+      "Facing": "East",
+      "Location": "Mumbai",
+      "Property Type": "Apartment"
+    },
+    "prediction": 25586.094488364633,
+    "actual": 30000.0
+  },
+  "numeric_ranges": {
+    "Area_num": [
+      250.0,
+      14500.0
+    ],
+    "BHK_num": [
+      1.0,
+      5.0
+    ],
+    "Bathrooms_num": [
+      1.0,
+      6.0
+    ],
+    "Balconies_num": [
+      1.0,
+      5.0
+    ],
+    "Price_num": [
+      1800.0,
+      3800000.0
+    ]
+  },
+  "duplicates_features_target": 2487,
+  "categories": {
+    "Furnished_clean": [
+      "Furnished",
+      "Semi-Furnished",
+      "Unfurnished"
+    ],
+    "Facing": [
+      "East",
+      "North",
+      "North - East",
+      "North - West",
+      "South",
+      "South - East",
+      "South -West",
+      "Unknown",
+      "West"
+    ],
+    "Location": [
+      "Mumbai"
+    ],
+    "Property Type": [
+      "Apartment",
+      "Builder Floor Apartment",
+      "Penthouse",
+      "Residential House",
+      "Service Apartment",
+      "Villa"
+    ]
+  },
+  "cv": {
+    "selected_random_forest": {
+      "test": {
+        "r2": 0.6187457377846625,
+        "mae": 38044.92790046044,
+        "rmse": 82899.45487397742
+      },
+      "folds": {
+        "r2": [
+          0.6652985893623875,
+          0.667269308307163,
+          0.5200636676978142,
+          0.6724283758174832,
+          0.7331143929077174
+        ],
+        "mae": [
+          37683.74194382645,
+          37955.72863649865,
+          37315.07347640613,
+          37398.05637984058,
+          35901.31123806491
+        ],
+        "rmse": [
+          71786.29156249801,
+          78545.05865386808,
+          96304.88997573341,
+          70400.91996931288,
+          68664.99446372951
+        ]
+      },
+      "mean": {
+        "r2": 0.6516348668185131,
+        "mae": 37250.78233492734,
+        "rmse": 77140.43092502837
+      },
+      "std": {
+        "r2": 0.07044628691519259,
+        "mae": 711.5192966437351,
+        "rmse": 10150.569532867563
+      }
+    },
+    "baseline_mean": {
+      "test": {
+        "r2": -1.1632507401770908e-08,
+        "mae": 77182.52841729225,
+        "rmse": 134259.2829850732
+      },
+      "folds": {
+        "r2": [
+          -0.00012596193250113963,
+          -4.2118014228487155e-05,
+          -8.160789952693648e-06,
+          -0.000344595247504742,
+          -0.0003248312187669189
+        ],
+        "mae": [
+          76590.26477163256,
+          76793.64719304838,
+          76513.77737903084,
+          75804.31075949881,
+          78432.52772348633
+        ],
+        "rmse": [
+          124090.94666092187,
+          136170.0454893533,
+          139013.92235119332,
+          123026.88057805323,
+          132936.2236403422
+        ]
+      },
+      "mean": {
+        "r2": -0.00016913344059079626,
+        "mae": 76826.90556533937,
+        "rmse": 131047.6037439728
+      },
+      "std": {
+        "r2": 0.0001406680743542606,
+        "mae": 869.3534260931053,
+        "rmse": 6418.654135798389
+      }
+    },
+    "baseline_median": {
+      "test": {
+        "r2": -0.09548359381107963,
+        "mae": 67123.75384615385,
+        "rmse": 140522.95049657405
+      },
+      "folds": {
+        "r2": [
+          -0.10594018280197703,
+          -0.09608320454836417,
+          -0.09049642269873992,
+          -0.10403292228803229,
+          -0.10670539208635699
+        ],
+        "mae": [
+          66303.80172413793,
+          67780.84411276948,
+          67326.4407960199,
+          65443.16451077944,
+          69515.97777777778
+        ],
+        "rmse": [
+          130490.40110004261,
+          142558.85496478283,
+          145167.24937085784,
+          129245.73166804244,
+          139826.2870975705
+        ]
+      },
+      "mean": {
+        "r2": -0.10065162488469408,
+        "mae": 67274.0457842969,
+        "rmse": 137457.70484025925
+      },
+      "std": {
+        "r2": 0.006325325447962474,
+        "mae": 1384.1494587204004,
+        "rmse": 6435.041820555707
+      }
+    }
+  },
+  "refit_matches_export": true,
+  "worst_locations": [
+    {
+      "Location": "Mumbai",
+      "mean": 38044.92790046044,
+      "count": 3770
+    }
+  ],
+  "test_rows_matching_train_features_target": 752,
+  "missing": {
+    "Area_num": 0,
+    "BHK_num": 0,
+    "Bathrooms_num": 15,
+    "Balconies_num": 10323,
+    "Furnished_clean": 13,
+    "Facing": 0,
+    "Location": 0,
+    "Property Type": 0
+  },
+  "test_error_by_rent_band": {
+    "up_to_100000": {
+      "count": 2597,
+      "mae": 19770.473499043714
+    },
+    "over_100000": {
+      "count": 1173,
+      "mae": 78504.22720180677
+    },
+    "over_500000": {
+      "count": 68,
+      "mae": 295559.4647151892
+    }
+  },
+  "numeric_imputation": [
+    1100.0,
+    2.0,
+    2.0,
+    1.0
+  ],
+  "categorical_imputation": [
+    "Semi-Furnished",
+    "East",
+    "Mumbai",
+    "Apartment"
+  ],
+  "dataset_sha256": "354d28e07432137cdc97a2197a556269137e74135af01186420e2e2917a19ee9"
+}
