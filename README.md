@@ -48,7 +48,7 @@ python -m pip install jupyterlab nbclient==0.10.2 nbformat==5.10.4 ipykernel==6.
 jupyter lab
 ```
 
-Open `notebook/supervised_learning.ipynb`, restart the kernel, and run all cells in order. The notebook uses the local cleaned CSV, exports figures to `figures/`, and saves/reloads its local trained pipeline. No upload to Hugging Face occurs during execution. The CI workflow repeats execution in a fresh environment and preserves the executed notebook and figures as an artifact.
+Open `notebook/supervised_learning.ipynb`, restart the kernel, and run all cells in order. The notebook uses the local cleaned CSV, exports figures to `figures/`, and saves/reloads its local trained pipeline. No upload to Hugging Face occurs during execution. The CI workflow repeats execution in a fresh environment and preserves the executed notebook and figures as an artifact. [Validation run](https://github.com/iaac-maai/group-3-day2-assignment/actions/runs/43700886086) passed on 15 November 2026: all 100 code cells ran in order without errors, the published regression metrics matched, and model export/reload reproduced the hand-made example (INR 25,586.09/month). The resulting outputs are committed.
 
 The reviewed Hugging Face revision referenced by the model card can be tested with:
 
@@ -72,11 +72,11 @@ CV uses five shuffled KFold splits with seed 42 and population standard deviatio
 
 ![Submitted Random Forest: predictions and residuals](figures/published_predictions.png)
 
-The diagonal represents perfect predictions; the residual panel makes underestimation and overestimation visible. The large gap between MAE and RMSE indicates that some listings have much larger errors than average.
+The diagonal represents perfect predictions; the residual panel makes underestimation and overestimation visible. The large gap between MAE and RMSE indicates that some listings have much larger errors than average. Several high-rent listings are substantially underestimated; the most extreme plotted example is near INR 2.5 million/month.
 
 ![Submitted Random Forest: permutation importance](figures/published_importance.png)
 
-Permutation importance measures the increase in test MAE after shuffling each input, with bars showing variation across five repeats. It describes predictive dependence, not a causal effect on rent. A near-zero result does not prove a feature is irrelevant in the real housing market.
+Permutation importance measures the increase in test MAE after shuffling each input, with bars showing variation across five repeats. Area has the largest importance in this evaluation, followed by BHK and bathrooms. Location contributes no measurable information because it is constant. It describes predictive dependence, not a causal effect on rent. A near-zero result does not prove a feature is irrelevant in the real housing market.
 
 ## Limitations
 
