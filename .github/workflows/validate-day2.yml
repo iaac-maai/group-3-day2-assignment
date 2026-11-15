@@ -1,0 +1,52 @@
+name: Validate Day 2 notebook
+on:
+  push:
+    branches: [main, fix/day2-submission]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  notebook:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install from UTF-8 requirements in a fresh environment
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install nbclient==0.10.2 nbformat==5.10.4 ipykernel==6.29.5
+          python -m pip check
+      - name: Execute every cell in a fresh Jupyter kernel
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import nbformat
+          from nbclient import NotebookClient
+          p = Path('notebook/supervised_learning.ipynb')
+          nb = nbformat.read(p, as_version=4)
+          for cell in nb.cells:
+              if cell.cell_type == 'code':
+                  cell.outputs = []
+                  cell.execution_count = None
+          NotebookClient(nb, timeout=1200, kernel_name='python3', resources={'metadata': {'path': str(p.parent.resolve())}}).execute()
+          nbformat.write(nb, p)
+          cells = [c for c in nb.cells if c.cell_type == 'code']
+          assert [c.execution_count for c in cells] == list(range(1, len(cells) + 1))
+          assert len(list(Path('figures').glob('*.png'))) >= 4
+          assert Path('figures/published_predictions.png').is_file()
+          assert Path('figures/published_importance.png').is_file()
+          import pandas as pd
+          assert len(pd.read_csv('data/mumbai_cleaned.csv')) == 18846
+          print(f'PASS: {len(cells)} cells, exported CSV and figures.')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: day2-executed
+          path: |
+            notebook/supervised_learning.ipynb
+            data/mumbai_cleaned.csv
+            figures/*.png
